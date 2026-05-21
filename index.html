@@ -56,60 +56,100 @@
 
   <script>
 
-    const hiragana = [
-      "あ","い","う","え","お",
-      "か","き","く","け","こ",
-      "さ","し","す","せ","そ",
-      "た","ち","つ","て","と"
-    ];
+  const hiragana = [
+    "あ","い","う","え","お",
+    "か","き","く","け","こ",
+    "さ","し","す","せ","そ",
+    "た","ち","つ","て","と"
+  ];
 
-    const alphabet = [
-      "A","B","C","D","E",
-      "F","G","H","I","J",
-      "K","L","M","N","O",
-      "P","Q","R","S","T"
-    ];
+  const alphabet = [
+    "A","B","C","D","E",
+    "F","G","H","I","J",
+    "K","L","M","N","O",
+    "P","Q","R","S","T"
+  ];
 
-    const numbers = [
-      1,2,3,4,5,
-      6,7,8,9,10,
-      11,12,13,14,15,
-      16,17,18,19,20
-    ];
+  const numbers = [
+    1,2,3,4,5,
+    6,7,8,9,10,
+    11,12,13,14,15,
+    16,17,18,19,20
+  ];
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+  function shuffle(array) {
 
-        [array[i], array[j]] = [array[j], array[i]];
-      }
+    for (let i = array.length - 1; i > 0; i--) {
 
-      return array;
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [array[i], array[j]] = [array[j], array[i]];
     }
 
-    function generate(type) {
+    return array;
+  }
 
-      let source = [];
+  function generate(type) {
 
-      if (type === "number") {
-        source = [...numbers];
-      }
+    let source = [];
 
-      if (type === "alphabet") {
-        source = [...alphabet];
-      }
-
-      if (type === "hiragana") {
-        source = [...hiragana];
-      }
-
-      const selected = shuffle(source).slice(0, 10);
-
-      document.getElementById("result").innerHTML =
-        selected.join("　");
+    if (type === "number") {
+      source = [...numbers];
     }
 
-  </script>
+    if (type === "alphabet") {
+      source = [...alphabet];
+    }
+
+    if (type === "hiragana") {
+      source = [...hiragana];
+    }
+
+    let html = "";
+
+    for (let match = 1; match <= 4; match++) {
+
+      const selected = shuffle([...source]).slice(0, 10);
+
+      selected.sort((a, b) => {
+
+        if (typeof a === "number") {
+          return a - b;
+        }
+
+        return String(a).localeCompare(String(b));
+      });
+
+      html += `
+        <div style="
+          margin-bottom: 25px;
+          padding: 15px;
+          background: white;
+          border-radius: 12px;
+        ">
+          <div style="
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #555;
+          ">
+            第${match}試合
+          </div>
+
+          <div style="
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 1.8;
+          ">
+            ${selected.join("　")}
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("result").innerHTML = html;
+  }
+
+</script>
 
 </body>
 </html>
