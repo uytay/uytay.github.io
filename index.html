@@ -7,92 +7,105 @@
 
   <title>競技かるた札分け</title>
 
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
   <style>
 
     body {
+
       margin: 0;
-      padding: 20px;
+
+      padding: 12px;
+
       font-family: sans-serif;
+
       background-color: #f5f5f5;
+
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 30px;
-      font-size: 32px;
+
+      font-size: 34px;
+
+      margin-top: 20px;
+
+      margin-bottom: 25px;
     }
 
     .button-area {
-      margin-bottom: 30px;
+
+      display: flex;
+
+      gap: 8px;
+
+      margin-bottom: 20px;
     }
 
-    button {
-      font-size: 20px;
-      padding: 15px 25px;
-      margin: 8px;
+    .button-area button {
+
+      flex: 1;
+
+      font-size: 18px;
+
+      padding: 14px 0;
+
       border: none;
-      border-radius: 12px;
-      background-color: #007aff;
-      color: white;
-    }
 
-    #saveButton {
-      background-color: #28a745;
+      border-radius: 12px;
+
+      background-color: #007aff;
+
+      color: white;
+
+      white-space: nowrap;
     }
 
     #result {
-
-      max-width: 700px;
-
-      margin: 0 auto;
 
       background-color: white;
 
       border-radius: 20px;
 
-      padding: 25px;
+      padding: 18px 14px;
 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .match {
 
-      padding: 20px 0;
+      display: flex;
+
+      align-items: center;
 
       border-bottom: 1px solid #ddd;
+
+      padding: 14px 0;
     }
 
     .match:last-child {
+
       border-bottom: none;
     }
 
     .match-title {
 
-      font-size: 26px;
+      width: 95px;
+
+      font-size: 24px;
 
       font-weight: bold;
 
-      margin-bottom: 12px;
+      flex-shrink: 0;
     }
 
     .match-content {
 
-      font-size: 28px;
+      font-size: 18px;
 
-      line-height: 1.8;
+      text-align: left;
+
+      line-height: 1.5;
 
       word-break: break-word;
-    }
-
-    .note {
-
-      margin-top: 20px;
-
-      color: #666;
-
-      font-size: 14px;
     }
 
   </style>
@@ -123,25 +136,15 @@
     <div class="match">
 
       <div class="match-title">
-        生成待ち
+        待機中
       </div>
 
       <div class="match-content">
-        上のボタンを押してください
+        ボタンを押してください
       </div>
 
     </div>
 
-  </div>
-
-  <br>
-
-  <button id="saveButton" onclick="saveImage()">
-    画像で保存
-  </button>
-
-  <div class="note">
-    LINEなどにそのまま送信できます
   </div>
 
   <script>
@@ -228,26 +231,6 @@
       }
 
       document.getElementById("result").innerHTML = html;
-    }
-
-    function saveImage() {
-
-      html2canvas(document.getElementById("result"), {
-
-        backgroundColor: "#ffffff",
-
-        scale: 3
-
-      }).then(canvas => {
-
-        const link = document.createElement("a");
-
-        link.download = "karuta.png";
-
-        link.href = canvas.toDataURL("image/png");
-
-        link.click();
-      });
     }
 
   </script>
