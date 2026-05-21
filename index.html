@@ -1,38 +1,100 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>競技かるた札分け</title>
 
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
   <style>
+
     body {
+      margin: 0;
+      padding: 20px;
       font-family: sans-serif;
-      text-align: center;
-      padding: 30px;
       background-color: #f5f5f5;
+      text-align: center;
     }
 
     h1 {
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .button-area {
       margin-bottom: 30px;
     }
 
     button {
       font-size: 20px;
       padding: 15px 25px;
-      margin: 10px;
+      margin: 8px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background-color: #007aff;
       color: white;
     }
 
-    #result {
-      margin-top: 30px;
-      font-size: 28px;
-      font-weight: bold;
-      line-height: 1.8;
+    #saveButton {
+      background-color: #28a745;
     }
+
+    #result {
+
+      max-width: 700px;
+
+      margin: 0 auto;
+
+      background-color: white;
+
+      border-radius: 20px;
+
+      padding: 25px;
+
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .match {
+
+      padding: 20px 0;
+
+      border-bottom: 1px solid #ddd;
+    }
+
+    .match:last-child {
+      border-bottom: none;
+    }
+
+    .match-title {
+
+      font-size: 26px;
+
+      font-weight: bold;
+
+      margin-bottom: 12px;
+    }
+
+    .match-content {
+
+      font-size: 28px;
+
+      line-height: 1.8;
+
+      word-break: break-word;
+    }
+
+    .note {
+
+      margin-top: 20px;
+
+      color: #666;
+
+      font-size: 14px;
+    }
+
   </style>
 </head>
 
@@ -40,116 +102,156 @@
 
   <h1>競技かるた札分け</h1>
 
-  <button onclick="generate('number')">
-    数字
+  <div class="button-area">
+
+    <button onclick="generate('number')">
+      数字
+    </button>
+
+    <button onclick="generate('alphabet')">
+      アルファベット
+    </button>
+
+    <button onclick="generate('hiragana')">
+      ひらがな
+    </button>
+
+  </div>
+
+  <div id="result">
+
+    <div class="match">
+
+      <div class="match-title">
+        生成待ち
+      </div>
+
+      <div class="match-content">
+        上のボタンを押してください
+      </div>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <button id="saveButton" onclick="saveImage()">
+    画像で保存
   </button>
 
-  <button onclick="generate('alphabet')">
-    アルファベット
-  </button>
-
-  <button onclick="generate('hiragana')">
-    ひらがな
-  </button>
-
-  <div id="result"></div>
+  <div class="note">
+    LINEなどにそのまま送信できます
+  </div>
 
   <script>
 
-  const hiragana = [
-    "あ","い","う","え","お",
-    "か","き","く","け","こ",
-    "さ","し","す","せ","そ",
-    "た","ち","つ","て","と"
-  ];
+    const hiragana = [
+      "あ","い","う","え","お",
+      "か","き","く","け","こ",
+      "さ","し","す","せ","そ",
+      "た","ち","つ","て","と"
+    ];
 
-  const alphabet = [
-    "A","B","C","D","E",
-    "F","G","H","I","J",
-    "K","L","M","N","O",
-    "P","Q","R","S","T"
-  ];
+    const alphabet = [
+      "A","B","C","D","E",
+      "F","G","H","I","J",
+      "K","L","M","N","O",
+      "P","Q","R","S","T"
+    ];
 
-  const numbers = [
-    1,2,3,4,5,
-    6,7,8,9,10,
-    11,12,13,14,15,
-    16,17,18,19,20
-  ];
+    const numbers = [
+      1,2,3,4,5,
+      6,7,8,9,10,
+      11,12,13,14,15,
+      16,17,18,19,20
+    ];
 
-  function shuffle(array) {
+    function shuffle(array) {
 
-    for (let i = array.length - 1; i > 0; i--) {
+      for (let i = array.length - 1; i > 0; i--) {
 
-      const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(Math.random() * (i + 1));
 
-      [array[i], array[j]] = [array[j], array[i]];
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+
+      return array;
     }
 
-    return array;
-  }
+    function generate(type) {
 
-  function generate(type) {
+      let source = [];
 
-    let source = [];
+      if (type === "number") {
+        source = [...numbers];
+      }
 
-    if (type === "number") {
-      source = [...numbers];
+      if (type === "alphabet") {
+        source = [...alphabet];
+      }
+
+      if (type === "hiragana") {
+        source = [...hiragana];
+      }
+
+      let html = "";
+
+      for (let match = 1; match <= 4; match++) {
+
+        const selected = shuffle([...source]).slice(0, 10);
+
+        selected.sort((a, b) => {
+
+          if (typeof a === "number") {
+            return a - b;
+          }
+
+          return String(a).localeCompare(String(b));
+        });
+
+        html += `
+
+          <div class="match">
+
+            <div class="match-title">
+              ${match}試合目
+            </div>
+
+            <div class="match-content">
+              ${selected.join(" ")}
+            </div>
+
+          </div>
+
+        `;
+      }
+
+      document.getElementById("result").innerHTML = html;
     }
 
-    if (type === "alphabet") {
-      source = [...alphabet];
-    }
+    function saveImage() {
 
-    if (type === "hiragana") {
-      source = [...hiragana];
-    }
+      html2canvas(document.getElementById("result"), {
 
-    let html = "";
+        backgroundColor: "#ffffff",
 
-    for (let match = 1; match <= 4; match++) {
+        scale: 3
 
-      const selected = shuffle([...source]).slice(0, 10);
+      }).then(canvas => {
 
-      selected.sort((a, b) => {
+        const link = document.createElement("a");
 
-        if (typeof a === "number") {
-          return a - b;
-        }
+        link.download = "karuta.png";
 
-        return String(a).localeCompare(String(b));
+        link.href = canvas.toDataURL("image/png");
+
+        link.click();
       });
-
-      html += `
-        <div style="
-          margin-bottom: 25px;
-          padding: 15px;
-          background: white;
-          border-radius: 12px;
-        ">
-          <div style="
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #555;
-          ">
-            第${match}試合
-          </div>
-
-          <div style="
-            font-size: 30px;
-            font-weight: bold;
-            line-height: 1.8;
-          ">
-            ${selected.join("　")}
-          </div>
-        </div>
-      `;
     }
 
-    document.getElementById("result").innerHTML = html;
-  }
-
-</script>
+  </script>
 
 </body>
+
 </html>
