@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>競技かるた札分け</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 15px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #007aff;
+      color: white;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>競技かるた札分け</h1>
+
+  <button onclick="generate('number')">
+    数字
+  </button>
+
+  <button onclick="generate('alphabet')">
+    アルファベット
+  </button>
+
+  <button onclick="generate('hiragana')">
+    ひらがな
+  </button>
+
+  <div id="result"></div>
+
+  <script>
+
+    const hiragana = [
+      "あ","い","う","え","お",
+      "か","き","く","け","こ",
+      "さ","し","す","せ","そ",
+      "た","ち","つ","て","と"
+    ];
+
+    const alphabet = [
+      "A","B","C","D","E",
+      "F","G","H","I","J",
+      "K","L","M","N","O",
+      "P","Q","R","S","T"
+    ];
+
+    const numbers = [
+      1,2,3,4,5,
+      6,7,8,9,10,
+      11,12,13,14,15,
+      16,17,18,19,20
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+
+      return array;
+    }
+
+    function generate(type) {
+
+      let source = [];
+
+      if (type === "number") {
+        source = [...numbers];
+      }
+
+      if (type === "alphabet") {
+        source = [...alphabet];
+      }
+
+      if (type === "hiragana") {
+        source = [...hiragana];
+      }
+
+      const selected = shuffle(source).slice(0, 10);
+
+      document.getElementById("result").innerHTML =
+        selected.join("　");
+    }
+
+  </script>
+
+</body>
+</html>
